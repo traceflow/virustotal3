@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/tr4cefl0w/virustotal3.git",
-    packages=['vt3api'],
+    packages=['virustotal3'],
     install_requires=[
           'requests',
       ],
