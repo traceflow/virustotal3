@@ -21,9 +21,7 @@ def _raise_exception(response):
 
 def search(api_key, query, order=None, limit=None, cursor=None,
            descriptors_only=None, proxies=None):
-    """Search for files
-
-    Search for files and return the file details.
+    """Search for files and return the file details.
 
     Parameters:
         api_key (str): VirusTotal API key
@@ -63,10 +61,9 @@ def search(api_key, query, order=None, limit=None, cursor=None,
 
 
 def file_feed(api_key, time):
-    """Get a file feed batch
-
-    Get a file feed batch for a given date, by the minute. From the official
-    documentation:
+    """Get a file feed batch for a given date, by the minute.
+    
+    From the official documentation:
     "Time 201912010802 will return the batch corresponding to December 1st, 2019 08:02 UTC.
     You can download batches up to 7 days old, and the most recent batch has always a 5 minutes
     lag with respect with to the current time."
@@ -159,8 +156,7 @@ class Livehunt:
         """ Create a Livehunt ruleset
 
         Parameters:
-            data (dict): Rule to create. See example below.
-
+            data (dict): Rule to create.
         Returns:
             A dict with the created rule.
         """
@@ -187,7 +183,6 @@ class Livehunt:
         Parameters:
             ruleset_id (str): Ruleset ID
             data (dict): Ruleset to update as dictionary. The package will take care of creating the JSON object.
-                         See example below.
 
         Returns:
             A dict with the updated rule.
@@ -233,9 +228,7 @@ class Livehunt:
             exit(1)
 
     def get_notifications(self, notification_id=None, limit=None, fltr=None, cursor=None):
-        """Retrieve one or multiple notifications
-
-        Retrieve a single notification for a given ID or all notifications at once.
+        """Retrieve a single notification for a given ID or all notifications at once.
 
         Parameters:
             notification_id (str, optional): Notification ID required to return a
@@ -270,9 +263,7 @@ class Livehunt:
             exit(1)
 
     def delete_notifications(self, tag):
-        """ Delete notifications
-
-        Delete notifications for a given tag
+        """Delete notifications for a given tag
 
         Parameters:
             tag (str): Notification tag
@@ -297,9 +288,7 @@ class Livehunt:
             exit(1)
 
     def delete_notification(self, notification_id):
-        """Delete a single notification
-
-        Delete a notification for a given notification ID
+        """Delete a notification for a given notification ID
 
         Parameters:
             notification_id (str): Notification ID
@@ -324,9 +313,7 @@ class Livehunt:
             exit(1)
 
     def get_notification_files(self, limit=None, cursor=None):
-        """Retrieve file objects for notifications
-
-        Retrieve file details and context attributes from notifications.
+        """Retrieve file details and context attributes from notifications.
 
         Parameters:
             limit (int, optional): Maximum number of rulesets to retrieve
@@ -373,9 +360,7 @@ class Retrohunt:
         self.proxies = proxies
 
     def get_jobs(self, job_id=None, limit=None, fltr=None, cursor=None):
-        """ Retrieve a Retrohunt job
-
-        Retrieve an existing Retrohunt jobs. Returns all jobs if no ID is specified.
+        """Retrieve an existing Retrohunt jobs. Returns all jobs if no ID is specified.
 
         Parameters:
             job_id (str, optional): Job ID
@@ -409,9 +394,7 @@ class Retrohunt:
             exit(1)
 
     def create_job(self, data):
-        """ Create a Retrohunt job
-
-        Create a new Retrohunt job
+        """Create a new Retrohunt job
 
         Parameters:
             data (dict): Rule to create. See example below.
@@ -435,9 +418,7 @@ class Retrohunt:
             exit(1)
 
     def delete_job(self, job_id):
-        """ Delete a job
-
-        Delete a job for a given ID
+        """Delete a job for a given ID
 
         Parameters:
             job_id (str): Job ID
@@ -460,9 +441,7 @@ class Retrohunt:
             exit(1)
 
     def abort_job(self, job_id):
-        """ Abort a job
-
-        Abort a job for a given ID
+        """Abort a job for a given ID
 
         Parameters:
             job_id (str): Job ID
@@ -485,9 +464,7 @@ class Retrohunt:
             exit(1)
 
     def get_matching_files(self, job_id):
-        """Get matching files
-
-        Get matching files for a job ID
+        """Get matching files for a job ID
 
         Parameters:
             job_id (str): Job ID
@@ -534,9 +511,7 @@ class Accounts:
         self.proxies = proxies
 
     def info_user(self, user_id):
-        """Retrieve information on a user
-
-        Retrieve information on a user for a given ID
+        """Retrieve information on a user for a given ID
 
         Parameters:
             user_id (str): User ID
@@ -561,9 +536,7 @@ class Accounts:
             exit(1)
 
     def info_group(self, group_id):
-        """Retrieve information on a group
-
-        Retrieve information on a group for a given ID
+        """Retrieve information on a group for a given ID
 
         Parameters:
             group_id (str): User ID
@@ -586,9 +559,7 @@ class Accounts:
             exit(1)
 
     def get_relationship(self, group_id, relationship, limit=None, cursor=None):
-        """Retrieve objects related to a group
-
-        Retrieve information on a user for a given group ID. Currently, the only relationship object supported by the
+        """Retrieve information on a user for a given group ID. Currently, the only relationship object supported by the
         VirusTotal v3 API is `graphs`.
 
         Parameters:
@@ -641,9 +612,7 @@ class ZipFiles:
         self.proxies = proxies
 
     def create_zip(self, data):
-        """Create a zip file
-
-        Creates a password-protected ZIP file with files from VirusTotal.
+        """Creates a password-protected ZIP file with files from VirusTotal.
 
         Parameters:
             data (str): Dictionary with a list of hashes to download. The format
@@ -677,9 +646,7 @@ class ZipFiles:
             exit(1)
 
     def info_zip(self, zip_id):
-        """Get the status of a Zip file
-
-        Check the status of a Zip file for a given ID.
+        """Check the status of a Zip file for a given ID.
 
         Parameters:
             zip_id (str): ID of the zip file
@@ -704,9 +671,7 @@ class ZipFiles:
             exit(1)
 
     def get_url(self, zip_id):
-        """Get the download URL of a Zip file
-
-        Get the download URL of a Zip file for a given ID. Will raise an exception if the file is not yet ready to
+        """Get the download URL of a Zip file for a given ID. Will raise an exception if the file is not yet ready to
         download. Should be called only after info_zip() returns a 'finished' status.
 
         Parameters:
@@ -730,9 +695,7 @@ class ZipFiles:
             exit(1)
 
     def get_zip(self, zip_id, output_dir):
-        """Download a zip file
-
-        Download a zip file for a given ID.
+        """Download a zip file for a given ID.
 
         Parameters:
             zip_id (str): ID of the zip file

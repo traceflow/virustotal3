@@ -66,10 +66,9 @@ class Files:
             raise Exception("You must provide a valid API key")
 
     def upload(self, sample):
-        """Upload a file
-
-        Upload a file. The size of the file will be calculated and the endpoint to use will be determined based on the
-        file size.
+        """Upload a file. 
+        
+        The size of the file will be calculated and the endpoint to use will be determined based on the file size.
 
         Parameters:
             sample (str): Path to file sample to upload
@@ -156,9 +155,7 @@ class Files:
             exit(1)
 
     def analyse_file(self, file_hash):
-        """Re-analyse a file
-
-        Reanalyse a file already in VirusTotal.
+        """Re-analyse a file already in VirusTotal.
 
         Parameters:
             file_hash (str): File hash to re-analyse
@@ -210,8 +207,7 @@ class Files:
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
-            data (dict): Comment to add as dictionary. The package will
-                         take care of creating the JSON object. See 'Example'.
+            data (dict): Comment to add as dictionary. The package will take care of creating the JSON object.
 
         Returns:
             A dict with the added comment.
@@ -257,10 +253,7 @@ class Files:
             exit(1)
 
     def add_vote(self, file_hash, verdict):
-        """Add a verdict to a file
-
-        Adds a verdict (vote) to a file. The verdict can be either
-        'malicious' or 'harmless'.
+        """Adds a verdict (vote) to a file. The verdict can be either 'malicious' or 'harmless'.
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
@@ -297,9 +290,7 @@ class Files:
             exit(1)
 
     def download(self, file_hash, output_dir='./'):
-        """Download a file
-
-        Download a file for a given file hash.
+        """Download a file for a given file hash.
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
@@ -338,8 +329,6 @@ class Files:
 
     def get_relationship(self, file_id, relationship, limit=None, cursor=None):
         """Retrieve an object related to a file
-
-        Retrieve an object related to a file
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
@@ -395,7 +384,7 @@ class URL:
 
     def __init__(self, api_key=None, proxies=None):
         """
-        Constructor for the Files class.
+        Constructor for the URL class.
 
         Parameters:
             api_key (str): VirusTotal API key
@@ -411,9 +400,7 @@ class URL:
             raise Exception("You must provide a valid API key")
 
     def info_url(self, url):
-        """Retrieve information about a URL
-
-        Retrieve information about a URL. If the URL was previously scanned, results will be returned immediately.
+        """Retrieve information about a URL. If the URL was previously scanned, results will be returned immediately.
         Otherwise, a URL scan will begin and results might take a few seconds to return.
 
         Parameters:
@@ -530,9 +517,7 @@ class URL:
             exit(1)
 
     def get_network_location(self, url):
-        """Retrieve associated IPs and DNS records
-
-        Retrieve associated IPs and DNS records, site categories, and WHOIS info for a given URL.
+        """Retrieve associated IPs and DNS records, site categories, and WHOIS info for a given URL.
 
         Parameters:
            url (str): URL identifier
@@ -556,9 +541,7 @@ class URL:
             exit(1)
 
     def get_relationship(self, url, relationship, limit=None, cursor=None):
-        """Retrieve objects related to a URL
-
-        Retrieve information on an object for a given URL identifier.
+        """Retrieve information on an object for a given URL identifier.
 
         Parameters:
             url (str): URL identifier
@@ -614,8 +597,6 @@ class Domains:
     def info_domain(self, domain):
         """Retrieve information about a domain
 
-        Retrieve information about a domain.
-
         Parameters:
             domain (str): Domain to scan
 
@@ -662,9 +643,7 @@ class Domains:
             exit(1)
 
     def add_vote(self, domain, verdict):
-        """Add a verdict to a domain
-
-        Adds a verdict (vote) to a domain. The verdict can be either 'malicious' or 'harmless'.
+        """Adds a verdict (vote) to a domain. The verdict can be either 'malicious' or 'harmless'.
 
         Parameters:
             domain (str): Domain
@@ -703,8 +682,6 @@ class Domains:
 
     def get_relationship(self, domain, relationship, limit=None, cursor=None):
         """Retrieve objects related to a domain
-
-        Retrieve objects related to a domain.
 
         Parameters:
             url (str): URL identifier
@@ -760,9 +737,7 @@ class IP:
             raise Exception("You must provide a valid API key")
 
     def info_ip(self, ip):
-        """Retrieve information about an IP
-
-        Retrieve information for a given IP address, such as AS owner, country, reputation, etc.
+        """Retrieve information for a given IP address, such as AS owner, country, reputation, etc.
 
         Parameters:
             ip (str): IPv4 address
@@ -784,9 +759,7 @@ class IP:
             exit(1)
 
     def get_votes(self, ip, limit=None, cursor=None):
-        """Retrieve votes for a domain
-
-        Retrieve votes for a given IP address
+        """Retrieve votes for a given IP address
 
         Parameters:
             ip (str): IPv4 address
@@ -812,10 +785,7 @@ class IP:
             exit(1)
 
     def add_vote(self, ip, verdict):
-        """Add a verdict to a file
-
-        Adds a verdict (vote) to a file. The verdict can be either
-        'malicious' or 'harmless'.
+        """Adds a verdict (vote) to a file. The verdict can be either 'malicious' or 'harmless'.
 
         Parameters:
             ip (str): IPv4 address
@@ -852,9 +822,7 @@ class IP:
             exit(1)
 
     def get_relationship(self, ip, relationship, limit=None, cursor=None):
-        """Retrieve objects related to a ip
-
-        Retrieve information on a user for a given URL identifier.
+        """Retrieve information on a user for a given ip identifier.
 
         Parameters:
             ip (str): IPv4 address
