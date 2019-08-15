@@ -10,7 +10,7 @@ import virustotal3.enterprise
 
 API_KEY = os.environ['VT_API']
 
-livehunt = virustotal3.enterprise.LiveHunt(API_KEY)
+livehunt = virustotal3.enterprise.Livehunt(API_KEY)
 
 rulesets = livehunt.get_rulesets()
 
