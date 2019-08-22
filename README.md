@@ -3,6 +3,9 @@ virustotal3
 
 virustotal3 provides an easy way to use VirusTotal version 3 REST endpoints, including those exclusive to VirusTotal Enterprise such as Live Hunt, Retro Hunt and Zip Files that were not available in version 2.
 
+### Documentation
+https://virustotal3.readthedocs.io/en/latest/
+
 ### Usage example
 ```
 import os
@@ -16,7 +19,6 @@ rulesets = livehunt.get_rulesets()
 
 print(rulesets)
 ```
-
 
 Features
 --------
