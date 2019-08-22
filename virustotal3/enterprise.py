@@ -62,7 +62,7 @@ def search(api_key, query, order=None, limit=None, cursor=None,
 
 def file_feed(api_key, time):
     """Get a file feed batch for a given date, by the minute.
-    
+
     From the official documentation:
     "Time 201912010802 will return the batch corresponding to December 1st, 2019 08:02 UTC.
     You can download batches up to 7 days old, and the most recent batch has always a 5 minutes
@@ -615,17 +615,8 @@ class ZipFiles:
         """Creates a password-protected ZIP file with files from VirusTotal.
 
         Parameters:
-            data (str): Dictionary with a list of hashes to download. The format
-                        should be the following:
-                        {
-                            "data": {
-                                "password": "zipfilepassword",
-                                "hashes":[
-                                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-                                "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",
-                                "ed1707bf39a62b0efd40e76f55409ee99db0289dc5027d0a5e5337b4e7a61ccc"]
-                            }
-                        }
+            data (str): Dictionary with a list of hashes to download. See example request for dictionary:
+                        https://developers.virustotal.com/v3.0/reference#zip_files
         Returns:
             A dict with the progression and status of the archive compression process, including its ID. Use the
             info_zip() function to check the status of a Zip file for a given ID.

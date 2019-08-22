@@ -4,30 +4,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Welcome to virustotal3’s documentation! &#8212; virustotal3 1.0.2 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Welcome to virustotal3’s documentation! &#8212; virustotal3 1.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="search" title="Search" href="search.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">virustotal3 1.0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="welcome-to-virustotal3-s-documentation">
@@ -913,9 +918,9 @@ resolutions, siblings, subips, urls</p>
 
 </div>
 </div>
-<div class="section" id="virustotal3-enterprise">
-<h1>virustotal3 enterprise<a class="headerlink" href="#virustotal3-enterprise" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-enterprise"></span><p>VirusTotal API v3 Enterprise</p>
+<div class="section" id="module-enterprise">
+<span id="virustotal3-enterprise"></span><h1>virustotal3 enterprise<a class="headerlink" href="#module-enterprise" title="Permalink to this headline">¶</a></h1>
+<p>VirusTotal API v3 Enterprise</p>
 <p>Module to interact with the Enterprise part of the API.</p>
 <dl class="class">
 <dt id="enterprise.Accounts">
@@ -1229,22 +1234,8 @@ single specific ruleset.</p></li>
 <dd><p>Creates a password-protected ZIP file with files from VirusTotal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – <p>Dictionary with a list of hashes to download. The format
-should be the following:
-{</p>
-<blockquote>
-<div><dl class="simple">
-<dt>”data”: {</dt><dd><p>“password”: “zipfilepassword”,
-“hashes”:[
-“e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855”,
-“275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f”,
-“ed1707bf39a62b0efd40e76f55409ee99db0289dc5027d0a5e5337b4e7a61ccc”]</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</p>
+<dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – Dictionary with a list of hashes to download. See example request for dictionary:
+<a class="reference external" href="https://developers.virustotal.com/v3.0/reference#zip_files">https://developers.virustotal.com/v3.0/reference#zip_files</a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A dict with the progression and status of the archive compression process, including its ID. Use the
@@ -1709,22 +1700,8 @@ VirusTotal v3 API is <cite>graphs</cite>.</p>
 <dd><p>Creates a password-protected ZIP file with files from VirusTotal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – <p>Dictionary with a list of hashes to download. The format
-should be the following:
-{</p>
-<blockquote>
-<div><dl class="simple">
-<dt>”data”: {</dt><dd><p>“password”: “zipfilepassword”,
-“hashes”:[
-“e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855”,
-“275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f”,
-“ed1707bf39a62b0efd40e76f55409ee99db0289dc5027d0a5e5337b4e7a61ccc”]</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
-<p>}</p>
-</p>
+<dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – Dictionary with a list of hashes to download. See example request for dictionary:
+<a class="reference external" href="https://developers.virustotal.com/v3.0/reference#zip_files">https://developers.virustotal.com/v3.0/reference#zip_files</a></p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A dict with the progression and status of the archive compression process, including its ID. Use the
@@ -1795,7 +1772,6 @@ the file is ready for download. Other status are: ‘starting’, ‘creating’
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -1811,7 +1787,7 @@ the file is ready for download. Other status are: ‘starting’, ‘creating’
 <li><a class="reference internal" href="#ip">IP</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#virustotal3-enterprise">virustotal3 enterprise</a><ul>
+<li><a class="reference internal" href="#module-enterprise">virustotal3 enterprise</a><ul>
 <li><a class="reference internal" href="#search">search</a></li>
 <li><a class="reference internal" href="#file-feed">file_feed</a></li>
 <li><a class="reference internal" href="#livehunt">Livehunt</a></li>
@@ -1844,20 +1820,21 @@ the file is ready for download. Other status are: ‘starting’, ‘creating’
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, tr4cefl0w.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/index.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">virustotal3 1.0.3 documentation</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, tr4cefl0w.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
   </body>
 </html>
