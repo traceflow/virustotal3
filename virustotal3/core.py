@@ -148,7 +148,7 @@ class Files:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -171,7 +171,7 @@ class Files:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -197,7 +197,7 @@ class Files:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -221,7 +221,7 @@ class Files:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -247,7 +247,7 @@ class Files:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -371,7 +371,7 @@ class Files:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -442,7 +442,7 @@ class URL:
                                         proxies=self.proxies)
                 time.sleep(3)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -470,7 +470,7 @@ class URL:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -535,7 +535,7 @@ class URL:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -566,7 +566,7 @@ class URL:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -610,7 +610,7 @@ class Domains:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -637,7 +637,7 @@ class Domains:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -708,7 +708,7 @@ class Domains:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -752,7 +752,7 @@ class IP:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -779,7 +779,7 @@ class IP:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
         except requests.exceptions.RequestException as error:
             print(error)
             exit(1)
@@ -815,7 +815,7 @@ class IP:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -849,7 +849,7 @@ class IP:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)

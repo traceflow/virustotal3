@@ -53,7 +53,7 @@ def search(api_key, query, order=None, limit=None, cursor=None,
         if response.status_code != 200:
             _raise_exception(response)
 
-        json.dumps(response.json(), indent=4, sort_keys=True)
+        response.json()
 
     except requests.exceptions.RequestException as error:
         print(error)
@@ -82,7 +82,7 @@ def file_feed(api_key, time):
         if response.status_code != 200:
             _raise_exception(response)
 
-        json.dumps(response.json(), indent=4, sort_keys=True)
+        response.json()
     except requests.exceptions.RequestException as error:
         print(error)
         exit(1)
@@ -146,7 +146,7 @@ class Livehunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -169,7 +169,7 @@ class Livehunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -196,7 +196,7 @@ class Livehunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -256,7 +256,7 @@ class Livehunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -332,7 +332,7 @@ class Livehunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -387,7 +387,7 @@ class Retrohunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -411,7 +411,7 @@ class Retrohunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -481,7 +481,7 @@ class Retrohunt:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -529,7 +529,7 @@ class Accounts:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -552,7 +552,7 @@ class Accounts:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -582,7 +582,7 @@ class Accounts:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -630,7 +630,7 @@ class ZipFiles:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -655,7 +655,7 @@ class ZipFiles:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
@@ -679,7 +679,7 @@ class ZipFiles:
             if response.status_code != 200:
                 _raise_exception(response)
 
-            return json.dumps(response.json(), indent=4, sort_keys=True)
+            return response.json()
 
         except requests.exceptions.RequestException as error:
             print(error)
