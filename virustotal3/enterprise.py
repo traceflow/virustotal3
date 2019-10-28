@@ -5,19 +5,22 @@ Module to interact with the Enterprise part of the API.
 import os
 import json
 import requests
+import virustotal3.errors
 
+VirusTotalApiError = virustotal3.errors.VirusTotalApiError
 
 def _raise_exception(response):
     """Raise Exception
 
     Function to raise an exception using the error messages returned by the API.
 
+    
+
     Parameters:
-        response (dict): Reponse with the error returned by the API.
+        response (dict) Reponse containing the error returned by the API.
     """
     # https://developers.virustotal.com/v3.0/reference#errors
-    raise Exception(response.text)
-
+    raise VirusTotalApiError(response.text)
 
 def search(api_key, query, order=None, limit=None, cursor=None,
            descriptors_only=None, proxies=None):

@@ -7,7 +7,9 @@ import base64
 import json
 import time
 import requests
+import virustotal3.errors
 
+VirusTotalApiError = virustotal3.errors.VirusTotalApiError
 
 def _raise_exception(response):
     """Raise Exception
@@ -18,7 +20,7 @@ def _raise_exception(response):
         response (dict) Reponse containing the error returned by the API.
     """
     # https://developers.virustotal.com/v3.0/reference#errors
-    raise Exception(response.text)
+    raise VirusTotalApiError(response.text)
 
 
 def get_analysis(api_key, analysis_id, proxies=None):
@@ -749,6 +751,7 @@ class IP:
             response = requests.get(self.base_url + '/{}'.format(ip),
                                     headers=self.headers,
                                     proxies=self.proxies)
+                                    
             if response.status_code != 200:
                 _raise_exception(response)
 
