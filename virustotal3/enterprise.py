@@ -141,7 +141,7 @@ class Livehunt:
                                         params=params,
                                         proxies=self.proxies)
             else:
-                params = {'limit': limit, 'fltr': fltr, 'order': order, 'cursor': cursor}
+                params = {'limit': limit, 'filter': fltr, 'order': order, 'cursor': cursor}
                 response = requests.get(self.base_url + '/hunting_rulesets',
                                         headers=self.headers,
                                         params=params,
@@ -251,10 +251,11 @@ class Livehunt:
                                         headers=self.headers,
                                         params=params)
             else:
-                params = {'limit': limit, 'fltr': fltr, 'cursor': cursor}
+                params = {'limit': limit, 'filter': fltr, 'cursor': cursor}
                 response = requests.get(self.base_url + '/hunting_notifications',
                                         headers=self.headers,
-                                        proxies=self.proxies)
+                                        proxies=self.proxies,
+                                        params=params)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -382,7 +383,7 @@ class Retrohunt:
                                         params=params,
                                         proxies=self.proxies)
             else:
-                params = {'limit': limit, 'fltr': fltr, 'cursor': cursor}
+                params = {'limit': limit, 'filter': fltr, 'cursor': cursor}
                 response = requests.get(self.base_url + '/Retrohunt_jobs',
                                         headers=self.headers,
                                         params=params,
