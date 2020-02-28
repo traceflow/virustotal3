@@ -1,12 +1,9 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-import virustotal3.core
-import virustotal3.errors
 import argparse
 import json
-from pandas.io.json import json_normalize
-
+from virustotal3 import cmd
 
 # USAGE EXAMPLE
 # python3 virustotal.py info --ip
@@ -42,32 +39,16 @@ except KeyError:
         print("Set the API key in the VT_API_KEY environment variable for permanent storage or use the --key argument")
         exit(1)
 
-# Initializing
-vt_domains = virustotal3.core.Domains(API_KEY)
-vt_ip = virustotal3.core.IP(API_KEY)
-vt_url = virustotal3.core.URL(API_KEY)
-vt_files = virustotal3.core.Files(API_KEY)
-
-# Subcommands
-def cmd_info(type, indicator):
-    try:
-        if type == 'domain':
-            results = vt_domains.info_domain(indicator)
-            print(json.dumps(results, indent=4))
-    except virustotal3.errors.VirusTotalApiError as e:
-        print(e)
-        exit(1)
-
-def cmd_relationships(type, indicator):
-    pass
+# Init commands
+cmd = cmd.Commands(API_KEY)
 
 # Parse commands
 if args.command == 'info':
     if args.domain:
-        cmd_info('domain', args.domain)
+        cmd.info('domain', args.domain)
 
     if args.ip:
-        pass
+        cmd.info('ip', args.ip)
     if args.file:
         pass
 if args.command == 'relationships':
