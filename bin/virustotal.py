@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import virustotal3.core
+import virustotal3.errors
 import argparse
 import json
 from pandas.io.json import json_normalize
@@ -32,16 +33,12 @@ parser_relationships.add_argument('--file')
 args = parser.parse_args()
 
 # SET API KEY 
-if 'VT_API_KEY' not in os.environ:
+try:
+    API_KEY = os.environ['VT_API_KEY']
+except KeyError:
     if args.key:
         API_KEY = args.key
     else:
-        print("Set the API key in the VT_API_KEY environment variable for permanent storage or use the --key argument")
-        exit(1)
-else:
-    try:
-        API_KEY = os.environ['VT_API_KEY']
-    except KeyError:
         print("Set the API key in the VT_API_KEY environment variable for permanent storage or use the --key argument")
         exit(1)
 
@@ -53,9 +50,13 @@ vt_files = virustotal3.core.Files(API_KEY)
 
 # Subcommands
 def cmd_info(type, indicator):
-    if type == 'domain':
-        results = vt_domains.info_domain(indicator)
-        print(json.dumps(results, indent=4))
+    try:
+        if type == 'domain':
+            results = vt_domains.info_domain(indicator)
+            print(json.dumps(results, indent=4))
+    except virustotal3.errors.VirusTotalApiError as e:
+        print(e)
+        exit(1)
 
 def cmd_relationships(type, indicator):
     pass
