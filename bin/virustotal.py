@@ -2,10 +2,6 @@ import os
 import getpass
 import argparse
 
-#try:
-#    API_KEY = os.environ['VT_API']
-#except KeyError:
-#    print("Please set the API key in the VT_API environment variable")
 
 # USAGE EXAMPLE
 # python3 virustotal.py info --ip
@@ -19,9 +15,10 @@ def relationships(ioc_type):
 
 # create the top-level parser
 parser = argparse.ArgumentParser()
+parser.add_argument('--key' )
 subparsers = parser.add_subparsers(title='commands', dest='command')
 
-# create the parser for the "domain" command
+# create the parser for the "info" command
 parser_info = subparsers.add_parser('info')
 parser_info.add_argument('--domain')
 parser_info.add_argument('--ip')
@@ -38,7 +35,7 @@ parser_relationships.add_argument('--file')
 
 # parse the args and call whatever function was selected
 args = parser.parse_args()
-
+if args.api_key
 if args.command == 'info':
     if args.domain:
         pass
