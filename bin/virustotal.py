@@ -1,19 +1,14 @@
 import os
-import getpass
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import virustotal3.core
 import argparse
+import json
+from pandas.io.json import json_normalize
 
-
-API_KEY = None
 
 # USAGE EXAMPLE
 # python3 virustotal.py info --ip
-
-# sub-command functions
-def info(ioc_type):
-    pass
-
-def relationships(ioc_type):
-    pass
 
 # create the top-level parser
 parser = argparse.ArgumentParser()
@@ -35,25 +30,52 @@ parser_relationships.add_argument('--file')
 
 # parse the args and call whatever function was selected
 args = parser.parse_args()
-if not args.key:
+
+# SET API KEY 
+if 'VT_API_KEY' not in os.environ:
+    if args.key:
+        API_KEY = args.key
+    else:
+        print("Set the API key in the VT_API_KEY environment variable for permanent storage or use the --key argument")
+        exit(1)
+else:
     try:
         API_KEY = os.environ['VT_API_KEY']
     except KeyError:
         print("Set the API key in the VT_API_KEY environment variable for permanent storage or use the --key argument")
+        exit(1)
 
-if args.key:
-    API_KEY = args.key
-    if args.command == 'info':
-        if args.domain:
-            pass
-        if args.ip:
-            pass
-        if args.file:
-            pass
-    if args.command == 'relationships':
-        if args.domain:
-            pass
-        if args.ip:
-            pass
-        if args.file:
-            pass
+# Initializing
+vt_domains = virustotal3.core.Domains(API_KEY)
+vt_ip = virustotal3.core.IP(API_KEY)
+vt_url = virustotal3.core.URL(API_KEY)
+vt_files = virustotal3.core.Files(API_KEY)
+
+# Subcommands
+def cmd_info(type, indicator):
+    if type == 'domain':
+        results = vt_domains.info_domain(indicator)
+        print(json.dumps(results, indent=4))
+
+def cmd_relationships(type, indicator):
+    pass
+
+# Parse commands
+if args.command == 'info':
+    if args.domain:
+        cmd_info('domain', args.domain)
+
+    if args.ip:
+        pass
+    if args.file:
+        pass
+if args.command == 'relationships':
+    if args.domain:
+        pass
+    if args.ip:
+        pass
+    if args.file:
+        pass
+
+
+
