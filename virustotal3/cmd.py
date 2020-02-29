@@ -1,10 +1,10 @@
 import json
-from prettytable import PrettyTable
 import virustotal3.core
 import virustotal3.errors
+import pandas as pd
 
-pt_info = PrettyTable
-
+#from tabulate import tabulate
+pd.set_option('display.max_colwidth', 40)
 
 # Subcommands
 class Commands:
@@ -19,15 +19,18 @@ class Commands:
         try:
             if type == 'domain':
                 results = self.vt_domains.info_domain(indicator)
-                print(json.dumps(results, indent=4))
-                #for key, value in results['data']['attributes']['last_analysis_stats'].items():
-                #    print(key, value)
-
+                #print(json.dumps(results, indent=4))
+                for key, value in results['data']['attributes']['last_analysis_stats'].items():
+                    detections = results['data']['attributes']['last_analysis_stats']
             if type == 'ip':
                 results = self.vt_ip.info_ip(indicator)
-                print(json.dumps(results, indent=4))
-                #for key, value in results['data']['attributes']['last_analysis_stats'].items():
-                #    print(key, value)
+                # Get all attributes returned by the API
+                attributes = results['data']['attributes']
+                # Create dataframe for ASN
+                pd.set_option('display.width', 200)
+                df = pd.DataFrame(columns=['as_owner','asn', 'country', 'last_modification_date', 'network', 'regional_internet_registry', 'reputation'], data=pd.json_normalize(attributes))
+                print(df.to_string(index=False, justify='left') + '\n\n')
+                
         except virustotal3.errors.VirusTotalApiError as e:
             print(e)
             exit(1)
