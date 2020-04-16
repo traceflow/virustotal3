@@ -3,9 +3,12 @@
 Module to interact with the Enterprise part of the API.
 """
 import os
+import bz2
 import json
 import requests
 import virustotal3.errors
+
+from io import BytesIO
 
 VirusTotalApiError = virustotal3.errors.VirusTotalApiError
 
@@ -63,32 +66,68 @@ def search(api_key, query, order=None, limit=None, cursor=None,
         exit(1)
 
 
-def file_feed(api_key, time):
-    """Get a file feed batch for a given date, by the minute.
-
-    From the official documentation:
-    "Time 201912010802 will return the batch corresponding to December 1st, 2019 08:02 UTC.
-    You can download batches up to 7 days old, and the most recent batch has always a 5 minutes
-    lag with respect with to the current time."
+def _get_feed(api_key, type_, time):
+    """ Get a minute from a feed
 
     Parameters:
-        time (str): DYYYYMMDDhhmm
+        api_key (str): VT key
+        type_ (str): type of feed to get
+        time (str): YYYYMMDDhhmm
+    
+    Returns:
+        StringIO: each line is a json string for one report
     """
     if api_key is None:
         raise Exception("You must provide a valid API key")
 
     try:
-        response = requests.get('https://www.virustotal.com/api/v3/feeds/files/{}'.format(time),
+        response = requests.get('https://www.virustotal.com/api/v3/feeds/{}/{}'.format(type_, time),
                                 headers={'x-apikey': api_key,
                                          'Accept': 'application/json'})
 
         if response.status_code != 200:
             _raise_exception(response)
 
-        response.json()
+        return BytesIO(bz2.decompress(response.content))
     except requests.exceptions.RequestException as error:
         print(error)
         exit(1)
+
+
+def file_feed(api_key, time):
+    """Get a file feed batch for a given date, by the minute.
+
+    From the official documentation:
+    "Time 201912010802 will return the batch corresponding to December 1st, 2019 08:02 UTC.
+    You can download batches up to 7 days old, and the most recent batch has always a 60 minutes
+    lag with respect with to the current time."
+
+    Parameters:
+        api_key (str): VirusTotal key
+        time (str): YYYYMMDDhhmm
+    
+    Returns:
+        StringIO: each line is a json string for one report
+    """
+    return _get_feed(api_key, "files", time)
+
+
+def url_feed(api_key, time):
+    """Get a URL feed batch for a given date, by the minute.
+
+    From the official documentation:
+    "Time 201912010802 will return the batch corresponding to December 1st, 2019 08:02 UTC.
+    You can download batches up to 7 days old, and the most recent batch has always a 60 minutes
+    lag with respect with to the current time."
+
+    Parameters:
+        api_key (str): VirusTotal key
+        time (str): YYYYMMDDhhmm
+    
+    Returns:
+        StringIO: each line is a json string for one report
+    """
+    return _get_feed(api_key, "urls", time)
 
 
 class Livehunt:
