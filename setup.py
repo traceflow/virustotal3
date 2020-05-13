@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="virustotal3",
-    version="1.0.5",
+    version="1.0.6",
     author="tr4cefl0w",
     author_email="tr4cefl0w@protonmail.com",
     description="Python 3 implementation of the VirusTotal v3 API",

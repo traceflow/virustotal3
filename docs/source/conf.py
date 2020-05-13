@@ -4,17 +4,20 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../virustotal3/'))
+sys.path.append(os.path.abspath('../../virustotal3'))
+sys.path.append(os.path.abspath('../../virustotal3/virustotal3'))
+sys.path.append(os.path.abspath('../..'))
+sys.path.append(os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'virustotal3'
-copyright = '2019, tr4cefl0w'
+copyright = 'GPL3'
 author = 'tr4cefl0w'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.3'
+release = '1.0.6'
 
 
 # -- General configuration ---------------------------------------------------
