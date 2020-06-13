@@ -26,7 +26,7 @@ def _raise_exception(response):
     raise VirusTotalApiError(response.text)
 
 def search(api_key, query, order=None, limit=None, cursor=None,
-           descriptors_only=None, proxies=None):
+           descriptors_only=None, proxies=None, timeout=None):
     """Search for files and return the file details.
 
     Parameters:
@@ -40,6 +40,7 @@ def search(api_key, query, order=None, limit=None, cursor=None,
         cursor (str, optional): Continuation cursor
         descriptors_only (bool, optional): Return file descriptor only instead of all details
         proxies (dict, optional): Dictionary with proxies
+        timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
     Returns:
         A dict with the results from the search.
@@ -54,7 +55,8 @@ def search(api_key, query, order=None, limit=None, cursor=None,
                                 params=params,
                                 headers={'x-apikey': api_key,
                                          'Accept': 'application/json'},
-                                proxies=proxies)
+                                proxies=proxies,
+                                timeout=timeout)
 
         if response.status_code != 200:
             _raise_exception(response)
@@ -66,13 +68,14 @@ def search(api_key, query, order=None, limit=None, cursor=None,
         exit(1)
 
 
-def _get_feed(api_key, type_, time):
+def _get_feed(api_key, type_, time, timeout=None):
     """ Get a minute from a feed
 
     Parameters:
         api_key (str): VT key
         type_ (str): type of feed to get
         time (str): YYYYMMDDhhmm
+        timeout (float, optional): The amount of time in seconds the request should wait before timing out.
     
     Returns:
         StringIO: each line is a json string for one report
@@ -83,7 +86,8 @@ def _get_feed(api_key, type_, time):
     try:
         response = requests.get('https://www.virustotal.com/api/v3/feeds/{}/{}'.format(type_, time),
                                 headers={'x-apikey': api_key,
-                                         'Accept': 'application/json'})
+                                         'Accept': 'application/json'},
+                                timeout=timeout)
 
         if response.status_code != 200:
             _raise_exception(response)
@@ -94,7 +98,7 @@ def _get_feed(api_key, type_, time):
         exit(1)
 
 
-def file_feed(api_key, time):
+def file_feed(api_key, time, timeout=None):
     """Get a file feed batch for a given date, by the minute.
 
     From the official documentation:
@@ -105,14 +109,15 @@ def file_feed(api_key, time):
     Parameters:
         api_key (str): VirusTotal key
         time (str): YYYYMMDDhhmm
+        timeout (float, optional): The amount of time in seconds the request should wait before timing out.
     
     Returns:
         StringIO: each line is a json string for one report
     """
-    return _get_feed(api_key, "files", time)
+    return _get_feed(api_key, "files", time, timeout=timeout)
 
 
-def url_feed(api_key, time):
+def url_feed(api_key, time, timeout=None):
     """Get a URL feed batch for a given date, by the minute.
 
     From the official documentation:
@@ -123,11 +128,12 @@ def url_feed(api_key, time):
     Parameters:
         api_key (str): VirusTotal key
         time (str): YYYYMMDDhhmm
+        timeout (float, optional): The amount of time in seconds the request should wait before timing out.
     
     Returns:
         StringIO: each line is a json string for one report
     """
-    return _get_feed(api_key, "urls", time)
+    return _get_feed(api_key, "urls", time, timeout=timeout)
 
 
 class Livehunt:
@@ -157,7 +163,7 @@ class Livehunt:
         if api_key is None:
             raise Exception("You must provide a valid API key")
 
-    def get_rulesets(self, ruleset_id=None, limit=None, fltr=None, order=None, cursor=None):
+    def get_rulesets(self, ruleset_id=None, limit=None, fltr=None, order=None, cursor=None, timeout=None):
         """Retrieve one or multiple rulesets
 
         Retrieve a single ruleset for a given ID or all rulesets at once.
@@ -168,6 +174,7 @@ class Livehunt:
             fltr (str, optional): Return the rulesets matching the given criteria only
             order (str, optional): Sort order
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with one or multiple rulesets.
@@ -178,13 +185,15 @@ class Livehunt:
                 response = requests.get(self.base_url + '/hunting_rulesets/{}'.format(ruleset_id),
                                         headers=self.headers,
                                         params=params,
-                                        proxies=self.proxies)
+                                        proxies=self.proxies,
+                                        timeout=timeout)
             else:
                 params = {'limit': limit, 'filter': fltr, 'order': order, 'cursor': cursor}
                 response = requests.get(self.base_url + '/hunting_rulesets',
                                         headers=self.headers,
                                         params=params,
-                                        proxies=self.proxies)
+                                        proxies=self.proxies,
+                                        timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -194,11 +203,12 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def create_rulset(self, data):
+    def create_rulset(self, data, timeout=None):
         """ Create a Livehunt ruleset
 
         Parameters:
             data (dict): Rule to create.
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
         Returns:
             A dict with the created rule.
         """
@@ -206,7 +216,8 @@ class Livehunt:
             response = requests.post(self.base_url + '/hunting_rulesets',
                                      data=json.dumps(data),
                                      headers=self.headers,
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -217,7 +228,7 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def update_ruleset(self, ruleset_id, data):
+    def update_ruleset(self, ruleset_id, data, timeout=None):
         """ Update existing ruleset
 
         Update an existing ruleset for a given ID
@@ -225,6 +236,7 @@ class Livehunt:
         Parameters:
             ruleset_id (str): Ruleset ID
             data (dict): Ruleset to update as dictionary. The package will take care of creating the JSON object.
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the updated rule.
@@ -233,7 +245,8 @@ class Livehunt:
             response = requests.patch(self.base_url + '/hunting_rulesets/{}'.format(ruleset_id),
                                       data=json.dumps(data),
                                       headers=self.headers,
-                                      proxies=self.proxies)
+                                      proxies=self.proxies,
+                                      timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -244,13 +257,14 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def delete_ruleset(self, ruleset_id):
+    def delete_ruleset(self, ruleset_id, timeout=None):
         """ Delete ruleset
 
         Delete ruleset for a given ID
 
         Parameters:
             ruleset_id (str): Ruleset ID
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             None
@@ -258,7 +272,8 @@ class Livehunt:
         try:
             response = requests.delete(self.base_url + '/hunting_rulesets/{}'.format(ruleset_id),
                                        headers=self.headers,
-                                       proxies=self.proxies)
+                                       proxies=self.proxies,
+                                       timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -269,7 +284,7 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def get_notifications(self, notification_id=None, limit=None, fltr=None, cursor=None):
+    def get_notifications(self, notification_id=None, limit=None, fltr=None, cursor=None, timeout=None):
         """Retrieve a single notification for a given ID or all notifications at once.
 
         Parameters:
@@ -278,6 +293,7 @@ class Livehunt:
             limit (int, optional): Maximum number of rulesets to retrieve
             fltr (str, optional): Return the rulesets matching the given criteria only
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with one or multiple notifications in JSON format.
@@ -288,13 +304,16 @@ class Livehunt:
                 response = requests.get(self.base_url + \
                                         '/hunting_notifications/{}'.format(notification_id),
                                         headers=self.headers,
-                                        params=params)
+                                        proxies=self.proxies,
+                                        params=params,
+                                        timeout=timeout)
             else:
                 params = {'limit': limit, 'filter': fltr, 'cursor': cursor}
                 response = requests.get(self.base_url + '/hunting_notifications',
                                         headers=self.headers,
                                         proxies=self.proxies,
-                                        params=params)
+                                        params=params,
+                                        timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -305,11 +324,12 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def delete_notifications(self, tag):
+    def delete_notifications(self, tag, timeout=None):
         """Delete notifications for a given tag
 
         Parameters:
             tag (str): Notification tag
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             None
@@ -319,7 +339,8 @@ class Livehunt:
             response = requests.delete(self.base_url + '/hunting_notifications',
                                        headers=self.headers,
                                        params=params,
-                                       proxies=self.proxies)
+                                       proxies=self.proxies,
+                                       timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -330,11 +351,12 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def delete_notification(self, notification_id):
+    def delete_notification(self, notification_id, timeout=None):
         """Delete a notification for a given notification ID
 
         Parameters:
             notification_id (str): Notification ID
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             None
@@ -344,7 +366,8 @@ class Livehunt:
             response = requests.delete(self.base_url + '/hunting_notifications',
                                        headers=self.headers,
                                        params=params,
-                                       proxies=self.proxies)
+                                       proxies=self.proxies,
+                                       timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -355,12 +378,13 @@ class Livehunt:
             print(error)
             exit(1)
 
-    def get_notification_files(self, limit=None, cursor=None):
+    def get_notification_files(self, limit=None, cursor=None, timeout=None):
         """Retrieve file details and context attributes from notifications.
 
         Parameters:
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with one or multiple notifications.
@@ -370,7 +394,8 @@ class Livehunt:
             response = requests.get(self.base_url + '/hunting_notification_files',
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -402,7 +427,7 @@ class Retrohunt:
                         'Accept': 'application/json'}
         self.proxies = proxies
 
-    def get_jobs(self, job_id=None, limit=None, fltr=None, cursor=None):
+    def get_jobs(self, job_id=None, limit=None, fltr=None, cursor=None, timeout=None):
         """Retrieve an existing Retrohunt jobs. Returns all jobs if no ID is specified.
 
         Parameters:
@@ -410,6 +435,7 @@ class Retrohunt:
             limit (int, optional): Maximum number of jobs to retrieve
             fltr (str, optional): Filter matching specific jobs only
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with one of multiple jobs.
@@ -420,13 +446,15 @@ class Retrohunt:
                 response = requests.get(self.base_url + '/Retrohunt_jobs/{}'.format(job_id),
                                         headers=self.headers,
                                         params=params,
-                                        proxies=self.proxies)
+                                        proxies=self.proxies,
+                                        timeout=timeout)
             else:
                 params = {'limit': limit, 'filter': fltr, 'cursor': cursor}
                 response = requests.get(self.base_url + '/Retrohunt_jobs',
                                         headers=self.headers,
                                         params=params,
-                                        proxies=self.proxies)
+                                        proxies=self.proxies,
+                                        timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -436,7 +464,7 @@ class Retrohunt:
             print(error)
             exit(1)
 
-    def create_job(self, data):
+    def create_job(self, data, timeout=None):
         """Create a new Retrohunt job
 
         Parameters:
@@ -449,7 +477,8 @@ class Retrohunt:
             response = requests.post(self.base_url + '/Retrohunt_jobs',
                                      data=json.dumps(data),
                                      headers=self.headers,
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -460,7 +489,7 @@ class Retrohunt:
             print(error)
             exit(1)
 
-    def delete_job(self, job_id):
+    def delete_job(self, job_id, timeout=None):
         """Delete a job for a given ID
 
         Parameters:
@@ -472,7 +501,8 @@ class Retrohunt:
         try:
             response = requests.delete(self.base_url + '/Retrohunt_jobs/{}'.format(job_id),
                                        headers=self.headers,
-                                       proxies=self.proxies)
+                                       proxies=self.proxies,
+                                       timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -483,11 +513,12 @@ class Retrohunt:
             print(error)
             exit(1)
 
-    def abort_job(self, job_id):
+    def abort_job(self, job_id, timeout=None):
         """Abort a job for a given ID
 
         Parameters:
             job_id (str): Job ID
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             None
@@ -495,7 +526,8 @@ class Retrohunt:
         try:
             response = requests.post(self.base_url + '/Retrohunt_jobs/{}/abort'.format(job_id),
                                      headers=self.headers,
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -506,11 +538,12 @@ class Retrohunt:
             print(error)
             exit(1)
 
-    def get_matching_files(self, job_id):
+    def get_matching_files(self, job_id, timeout=None):
         """Get matching files for a job ID
 
         Parameters:
             job_id (str): Job ID
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with matching files
@@ -519,7 +552,8 @@ class Retrohunt:
             response = requests.get(self.base_url + \
                                     '/Retrohunt_jobs/{}/matching_files'.format(job_id),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -553,11 +587,12 @@ class Accounts:
                         'Accept': 'application/json'}
         self.proxies = proxies
 
-    def info_user(self, user_id):
+    def info_user(self, user_id, timeout=None):
         """Retrieve information on a user for a given ID
 
         Parameters:
             user_id (str): User ID
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the details on the user.
@@ -567,7 +602,8 @@ class Accounts:
             response = requests.get(self.base_url + '/users/{}'.format(user_id),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -578,11 +614,12 @@ class Accounts:
             print(error)
             exit(1)
 
-    def info_group(self, group_id):
+    def info_group(self, group_id, timeout=None):
         """Retrieve information on a group for a given ID
 
         Parameters:
             group_id (str): User ID
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the details on the group.
@@ -590,7 +627,8 @@ class Accounts:
         try:
             response = requests.get(self.base_url + '/groups/{}'.format(group_id),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=None)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -601,7 +639,7 @@ class Accounts:
             print(error)
             exit(1)
 
-    def get_relationship(self, group_id, relationship, limit=None, cursor=None):
+    def get_relationship(self, group_id, relationship, limit=None, cursor=None, timeout=None):
         """Retrieve information on a user for a given group ID. Currently, the only relationship object supported by the
         VirusTotal v3 API is `graphs`.
 
@@ -610,6 +648,7 @@ class Accounts:
             relationship (str): Relationship
             limit (str, optional): Limit of results to return
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the relationship object.
@@ -620,7 +659,8 @@ class Accounts:
                                     '/groups/{}/relationships/{}'.format(group_id, relationship),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -654,12 +694,13 @@ class ZipFiles:
                         'Accept': 'application/json'}
         self.proxies = proxies
 
-    def create_zip(self, data):
+    def create_zip(self, data, timeout=None):
         """Creates a password-protected ZIP file with files from VirusTotal.
 
         Parameters:
             data (str): Dictionary with a list of hashes to download. See example request for dictionary:
                         https://developers.virustotal.com/v3.0/reference#zip_files
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
         Returns:
             A dict with the progression and status of the archive compression process, including its ID. Use the
             info_zip() function to check the status of a Zip file for a given ID.
@@ -668,7 +709,8 @@ class ZipFiles:
             response = requests.post(self.base_url + '/zip_files',
                                      headers=self.headers,
                                      data=json.dumps(data),
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -679,11 +721,12 @@ class ZipFiles:
             print(error)
             exit(1)
 
-    def info_zip(self, zip_id):
+    def info_zip(self, zip_id, timeout=None):
         """Check the status of a Zip file for a given ID.
 
         Parameters:
             zip_id (str): ID of the zip file
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the status of the zip file creation. When the value of the 'status' key is set to 'finished',
@@ -693,7 +736,8 @@ class ZipFiles:
         try:
             response = requests.get(self.base_url + '/zip_files/{}'.format(zip_id),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -704,12 +748,13 @@ class ZipFiles:
             print(error)
             exit(1)
 
-    def get_url(self, zip_id):
+    def get_url(self, zip_id, timeout=None):
         """Get the download URL of a Zip file for a given ID. Will raise an exception if the file is not yet ready to
         download. Should be called only after info_zip() returns a 'finished' status.
 
         Parameters:
             zip_id (str): ID of the zip file
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             URL of the zip file to download
@@ -718,7 +763,8 @@ class ZipFiles:
         try:
             response = requests.get(self.base_url + '/zip_files/{}/download_url'.format(zip_id),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -728,18 +774,20 @@ class ZipFiles:
             print(error)
             exit(1)
 
-    def get_zip(self, zip_id, output_dir):
+    def get_zip(self, zip_id, output_dir, timeout=None):
         """Download a zip file for a given ID.
 
         Parameters:
             zip_id (str): ID of the zip file
             output_dir (str): Output directory where the file will be downloaded.
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
         """
 
         try:
             response = requests.get(self.base_url + '/zip_files/{}/download'.format(zip_id),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 

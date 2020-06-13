@@ -23,20 +23,22 @@ def _raise_exception(response):
     raise VirusTotalApiError(response.text)
 
 
-def get_analysis(api_key, analysis_id, proxies=None):
+def get_analysis(api_key, analysis_id, proxies=None, timeout=None):
     """Retrieve information about an analysis
 
     Parameters:
         api_key (str): VirusTotal API key
         analysis_id (str): Analysis ID to retrieve
         proxies (dict, optional): Dictionary containing proxies
+        timeout (float, optional): The amount of time in seconds the request should wait before timing out.
     """
 
     try:
         response = requests.get('https://www.virustotal.com/api/v3/analyses/{}'.format(analysis_id),
                                 headers={'x-apikey': api_key,
                                          'Accept': 'application/json'},
-                                proxies=proxies)
+                                proxies=proxies,
+                                timeout=timeout)
         if response.status_code != 200:
             _raise_exception(response)
 
@@ -67,13 +69,14 @@ class Files:
         if api_key is None:
             raise Exception("You must provide a valid API key")
 
-    def upload(self, sample):
+    def upload(self, sample, timeout=None):
         """Upload a file. 
         
         The size of the file will be calculated and the endpoint to use will be determined based on the file size.
 
         Parameters:
             sample (str): Path to file sample to upload
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the analysis ID
@@ -92,7 +95,8 @@ class Files:
                     response = requests.post(self.base_url,
                                              headers=self.headers,
                                              files=data,
-                                             proxies=self.proxies)
+                                             proxies=self.proxies,
+                                             timeout=timeout)
 
                     if response.status_code != 200:
                         _raise_exception(response)
@@ -111,7 +115,8 @@ class Files:
                     # Get the upload URL first
                     response = requests.get(self.base_url + '/upload_url',
                                             headers=self.headers,
-                                            proxies=self.proxies)
+                                            proxies=self.proxies,
+                                            timeout=timeout)
 
                     if response.status_code != 200:
                         _raise_exception(response)
@@ -122,7 +127,8 @@ class Files:
                     response = requests.post(upload_url,
                                              headers=self.headers,
                                              files=data,
-                                             proxies=self.proxies)
+                                             proxies=self.proxies,
+                                             timeout=timeout)
 
                     if response.status_code != 200:
                         _raise_exception(response)
@@ -133,11 +139,12 @@ class Files:
                     print(error)
                     exit(1)
 
-    def info_file(self, file_hash):
+    def info_file(self, file_hash, timeout=None):
         """Retrieve information on a file
 
         Parameters:
             file_hash (str): File hash of the file
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict containing information about the file.
@@ -145,7 +152,8 @@ class Files:
         try:
             response = requests.get(self.base_url + '/{}'.format(file_hash),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -156,11 +164,12 @@ class Files:
             print(error)
             exit(1)
 
-    def analyse_file(self, file_hash):
+    def analyse_file(self, file_hash, timeout=None):
         """Re-analyse a file already in VirusTotal.
 
         Parameters:
             file_hash (str): File hash to re-analyse
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the analysis ID.
@@ -168,7 +177,8 @@ class Files:
         try:
             response = requests.post(self.base_url + '/{}/analyse'.format(file_hash),
                                      headers=self.headers,
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -178,13 +188,14 @@ class Files:
             print(error)
             exit(1)
 
-    def get_comments(self, file_hash, limit=None, cursor=None):
+    def get_comments(self, file_hash, limit=None, cursor=None, timeout=None):
         """Retrieve comments for a file
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the comments retrieved.
@@ -194,7 +205,8 @@ class Files:
             response = requests.get(self.base_url + '/{}/comments'.format(file_hash),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -204,12 +216,13 @@ class Files:
             print(error)
             exit(1)
 
-    def add_comment(self, file_hash, comment):
+    def add_comment(self, file_hash, comment, timeout=None):
         """Add a comment to a file
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
             data (dict): Comment to add as dictionary. The package will take care of creating the JSON object.
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the added comment.
@@ -218,7 +231,8 @@ class Files:
             response = requests.post(self.base_url + '/{}/comments'.format(file_hash),
                                      headers=self.headers,
                                      data=json.dumps(comment),
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -228,13 +242,14 @@ class Files:
             print(error)
             exit(1)
 
-    def get_votes(self, file_hash, limit=None, cursor=None):
+    def get_votes(self, file_hash, limit=None, cursor=None, timeout=None):
         """Retrieve votes for a file
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the votes. The votes are located in the 'value' key.
@@ -244,7 +259,8 @@ class Files:
             response = requests.get(self.base_url + '/{}/votes'.format(file_hash),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -254,12 +270,13 @@ class Files:
             print(error)
             exit(1)
 
-    def add_vote(self, file_hash, verdict):
+    def add_vote(self, file_hash, verdict, timeout=None):
         """Adds a verdict (vote) to a file. The verdict can be either 'malicious' or 'harmless'.
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
             verdict (str): 'malicious' (-1) or 'harmless' (+1)
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the submitted vote.
@@ -281,7 +298,8 @@ class Files:
             response = requests.post(self.base_url + '/{}/votes'.format(file_hash),
                                      headers=self.headers,
                                      data=json.dumps(data),
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -291,12 +309,13 @@ class Files:
             print(error)
             exit(1)
 
-    def download(self, file_hash, output_dir='./'):
+    def download(self, file_hash, output_dir='./', timeout=None):
         """Download a file for a given file hash.
 
         Parameters:
             file_hash (str): File hash (SHA256, MD5, SHA1)
             output_dir (str, optional): Output directory, current working directory by default.
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             None
@@ -306,7 +325,8 @@ class Files:
             # Get download URL
             response = requests.get(self.base_url + '/{}/download_url'.format(file_hash),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -315,7 +335,8 @@ class Files:
             # Download file
             response = requests.get(download_url,
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -329,7 +350,7 @@ class Files:
             print(error)
             exit(1)
 
-    def get_relationship(self, file_id, relationship, limit=None, cursor=None):
+    def get_relationship(self, file_id, relationship, limit=None, cursor=None, timeout=None):
         """Retrieve an object related to a file
 
         Parameters:
@@ -347,6 +368,7 @@ class Files:
 
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict containing the relationship object.
@@ -368,7 +390,8 @@ class Files:
             response = requests.get(self.base_url + '/{}/{}'.format(file_id, relationship),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -401,12 +424,13 @@ class URL:
         if api_key is None:
             raise Exception("You must provide a valid API key")
 
-    def info_url(self, url):
+    def info_url(self, url, timeout=None):
         """Retrieve information about a URL. If the URL was previously scanned, results will be returned immediately.
         Otherwise, a URL scan will begin and results might take a few seconds to return.
 
         Parameters:
             url (str): URL to scan
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the scan results.
@@ -416,7 +440,8 @@ class URL:
             response = requests.post(self.base_url,
                                      headers=self.headers,
                                      data={'url': url},
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -430,7 +455,8 @@ class URL:
             encoded_url = base64.b64encode(url.encode())
             response = requests.get(self.base_url + '/{}'.format(encoded_url.decode().replace('=', '')),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -441,7 +467,8 @@ class URL:
             while not response.json()['data']['attributes']['last_analysis_results']:
                 response = requests.get(self.base_url + '/{}'.format(encoded_url.decode().replace('=', '')),
                                         headers=self.headers,
-                                        proxies=self.proxies)
+                                        proxies=self.proxies,
+                                        timeout=timeout)
                 time.sleep(3)
 
             return response.json()
@@ -450,13 +477,14 @@ class URL:
             print(error)
             exit(1)
 
-    def get_votes(self, url, limit=None, cursor=None):
+    def get_votes(self, url, limit=None, cursor=None, timeout=None):
         """Retrieve votes for a URL
 
         Parameters:
             url (str): URL identifier
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the votes. The votes are located in the 'value' key.
@@ -467,7 +495,8 @@ class URL:
             response = requests.get(self.base_url + '/{}/votes'.format(encoded_url.decode().replace('=', '')),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -477,7 +506,7 @@ class URL:
             print(error)
             exit(1)
 
-    def add_vote(self, url, verdict):
+    def add_vote(self, url, verdict, timeout=None):
         """Add a verdict to a URL
 
         Adds a verdict (vote) to a URL. The verdict can be either 'malicious' or 'harmless'.
@@ -485,6 +514,7 @@ class URL:
         Parameters:
             url (str): URL identifier
             verdict (str): 'malicious' (-1) or 'harmless' (+1)
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict containing the submitted vote.
@@ -508,7 +538,8 @@ class URL:
             response = requests.post(self.base_url + '/{}/votes'.format(encoded_url.decode().replace('=', '')),
                                      headers=self.headers,
                                      data=json.dumps(data),
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -518,11 +549,12 @@ class URL:
             print(error)
             exit(1)
 
-    def get_network_location(self, url):
+    def get_network_location(self, url, timeout=None):
         """Retrieve associated IPs and DNS records, site categories, and WHOIS info for a given URL.
 
         Parameters:
            url (str): URL identifier
+           timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the details of a URL, including its latest DNS records and IP addresses.
@@ -532,7 +564,8 @@ class URL:
             response = requests.get(self.base_url + '/{}/network_location'\
                                     .format(encoded_url.decode().replace('=', '')),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -542,7 +575,7 @@ class URL:
             print(error)
             exit(1)
 
-    def get_relationship(self, url, relationship, limit=None, cursor=None):
+    def get_relationship(self, url, relationship, limit=None, cursor=None, timeout=None):
         """Retrieve information on an object for a given URL identifier.
 
         Parameters:
@@ -552,6 +585,7 @@ class URL:
                                 redirecting_urls, submissions
             limit (str, optional): Limit of results to return
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the relationship object.
@@ -563,7 +597,8 @@ class URL:
                                     .format(encoded_url.decode().replace('=', ''), relationship),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -596,11 +631,12 @@ class Domains:
         if api_key is None:
             raise Exception("You must provide a valid API key")
 
-    def info_domain(self, domain):
+    def info_domain(self, domain, timeout=None):
         """Retrieve information about a domain
 
         Parameters:
             domain (str): Domain to scan
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the scan results.
@@ -608,7 +644,8 @@ class Domains:
         try:
             response = requests.get(self.base_url + '/{}'.format(domain),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -618,13 +655,14 @@ class Domains:
             print(error)
             exit(1)
 
-    def get_votes(self, domain, limit=None, cursor=None):
+    def get_votes(self, domain, limit=None, cursor=None, timeout=None):
         """Retrieve votes for a domain
 
         Parameters:
             domain (str): Domain
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the votes. The votes are located in the 'value' key.
@@ -634,7 +672,8 @@ class Domains:
             response = requests.get(self.base_url + '/{}/votes'.format(domain),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -644,12 +683,13 @@ class Domains:
             print(error)
             exit(1)
 
-    def add_vote(self, domain, verdict):
+    def add_vote(self, domain, verdict, timeout=None):
         """Adds a verdict (vote) to a domain. The verdict can be either 'malicious' or 'harmless'.
 
         Parameters:
             domain (str): Domain
             verdict (str): 'malicious' (-1) or 'harmless' (+1)
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the submitted vote.
@@ -672,7 +712,8 @@ class Domains:
             response = requests.post(self.base_url + '/{}/votes'.format(domain),
                                      headers=self.headers,
                                      data=json.dumps(data),
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -682,7 +723,7 @@ class Domains:
             print(error)
             exit(1)
 
-    def get_relationship(self, domain, relationship, limit=None, cursor=None):
+    def get_relationship(self, domain, relationship, limit=None, cursor=None, timeout=None):
         """Retrieve objects related to a domain
 
         Parameters:
@@ -696,6 +737,7 @@ class Domains:
 
             limit (str, optional): Limit of results to return
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the relationship object.
@@ -705,7 +747,8 @@ class Domains:
             response = requests.get(self.base_url + '/{}/{}'.format(domain, relationship),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -738,11 +781,12 @@ class IP:
         if api_key is None:
             raise Exception("You must provide a valid API key")
 
-    def info_ip(self, ip):
+    def info_ip(self, ip, timeout=None):
         """Retrieve information for a given IP address, such as AS owner, country, reputation, etc.
 
         Parameters:
             ip (str): IPv4 address
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict containing the scan results.
@@ -750,7 +794,8 @@ class IP:
         try:
             response = requests.get(self.base_url + '/{}'.format(ip),
                                     headers=self.headers,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
                                     
             if response.status_code != 200:
                 _raise_exception(response)
@@ -761,13 +806,14 @@ class IP:
             print(error)
             exit(1)
 
-    def get_votes(self, ip, limit=None, cursor=None):
+    def get_votes(self, ip, limit=None, cursor=None, timeout=None):
         """Retrieve votes for a given IP address
 
         Parameters:
             ip (str): IPv4 address
             limit (int, optional): Maximum number of rulesets to retrieve
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict containing the votes. The votes are located in the 'value' key.
@@ -777,7 +823,8 @@ class IP:
             response = requests.get(self.base_url + '/{}/votes'.format(ip),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
@@ -787,12 +834,13 @@ class IP:
             print(error)
             exit(1)
 
-    def add_vote(self, ip, verdict):
+    def add_vote(self, ip, verdict, timeout=None):
         """Adds a verdict (vote) to a file. The verdict can be either 'malicious' or 'harmless'.
 
         Parameters:
             ip (str): IPv4 address
             verdict (str): 'malicious' (-1) or 'harmless' (+1)
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict containing the submitted vote.
@@ -814,7 +862,8 @@ class IP:
             response = requests.post(self.base_url + '/{}/votes'.format(ip),
                                      headers=self.headers,
                                      data=json.dumps(data),
-                                     proxies=self.proxies)
+                                     proxies=self.proxies,
+                                     timeout=timeout)
             if response.status_code != 200:
                 _raise_exception(response)
 
@@ -824,7 +873,7 @@ class IP:
             print(error)
             exit(1)
 
-    def get_relationship(self, ip, relationship, limit=None, cursor=None):
+    def get_relationship(self, ip, relationship, limit=None, cursor=None, timeout=None):
         """Retrieve information on a user for a given ip identifier.
 
         Parameters:
@@ -838,6 +887,7 @@ class IP:
 
             limit (str, optional): Limit of results to return
             cursor (str, optional): Continuation cursor
+            timeout (float, optional): The amount of time in seconds the request should wait before timing out.
 
         Returns:
             A dict with the relationship object.
@@ -847,7 +897,8 @@ class IP:
             response = requests.get(self.base_url + '/{}/{}'.format(ip, relationship),
                                     headers=self.headers,
                                     params=params,
-                                    proxies=self.proxies)
+                                    proxies=self.proxies,
+                                    timeout=timeout)
 
             if response.status_code != 200:
                 _raise_exception(response)
