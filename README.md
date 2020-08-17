@@ -3,9 +3,8 @@ virustotal3
 virustotal3 provides an easy way to use VirusTotal version 3 REST endpoints, including those exclusive to VirusTotal Enterprise such as Live Hunt, Retro Hunt and Zip Files that were not available in version 2.
 
 ### Changelog
-#### 1.0.6
-* Merged pull request #5 fixing file_feed()
-* Updated Sphinx documentation
+#### 1.0.7
+* Merged pull request #8
 
 ### Documentation
 https://virustotal3.readthedocs.io/en/latest/
