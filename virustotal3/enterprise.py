@@ -61,7 +61,7 @@ def search(api_key, query, order=None, limit=None, cursor=None,
         if response.status_code != 200:
             _raise_exception(response)
 
-        response.json()
+        return response.json()
 
     except requests.exceptions.RequestException as error:
         print(error)
