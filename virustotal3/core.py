@@ -36,7 +36,7 @@ def get_analysis(api_key, analysis_id, proxies=None, timeout=None):
     try:
         response = requests.get('https://www.virustotal.com/api/v3/analyses/{}'.format(analysis_id),
                                 headers={'x-apikey': api_key,
-                                         'Accept': 'application/json'},
+                                         'Content-Type': 'application/json'},
                                 proxies=proxies,
                                 timeout=timeout)
         if response.status_code != 200:
@@ -63,7 +63,7 @@ class Files:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/files'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
         if api_key is None:
@@ -418,7 +418,7 @@ class URL:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/urls'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
         if api_key is None:
@@ -625,7 +625,7 @@ class Domains:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/domains'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
         if api_key is None:
@@ -775,7 +775,7 @@ class IP:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/ip_addresses'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
         if api_key is None:
