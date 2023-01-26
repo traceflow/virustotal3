@@ -54,7 +54,7 @@ def search(api_key, query, order=None, limit=None, cursor=None,
         response = requests.get('https://www.virustotal.com/api/v3/intelligence/search',
                                 params=params,
                                 headers={'x-apikey': api_key,
-                                         'Accept': 'application/json'},
+                                         'Content-Type': 'application/json'},
                                 proxies=proxies,
                                 timeout=timeout)
 
@@ -86,7 +86,7 @@ def _get_feed(api_key, type_, time, timeout=None):
     try:
         response = requests.get('https://www.virustotal.com/api/v3/feeds/{}/{}'.format(type_, time),
                                 headers={'x-apikey': api_key,
-                                         'Accept': 'application/json'},
+                                         'Content-Type': 'application/json'},
                                 timeout=timeout)
 
         if response.status_code != 200:
@@ -157,7 +157,7 @@ class Livehunt:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/intelligence'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
         if api_key is None:
@@ -424,7 +424,7 @@ class Retrohunt:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/intelligence'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
     def get_jobs(self, job_id=None, limit=None, fltr=None, cursor=None, timeout=None):
@@ -584,7 +584,7 @@ class Accounts:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
     def info_user(self, user_id, timeout=None):
@@ -691,7 +691,7 @@ class ZipFiles:
         self.api_key = api_key
         self.base_url = 'https://www.virustotal.com/api/v3/intelligence'
         self.headers = {'x-apikey': self.api_key,
-                        'Accept': 'application/json'}
+                        'Content-Type': 'application/json'}
         self.proxies = proxies
 
     def create_zip(self, data, timeout=None):
